@@ -1,0 +1,768 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include <windows.h>
+
+using namespace std;
+
+// Admin Class
+class Admin {
+public:
+    Admin() {}
+    Admin(string username, string password) : username(username), password(password) {}
+    int  signInToSystem();
+    void addNewTeacher();
+    void generateTeacherID();
+    void addNewStudent();
+    void generateStudentID();
+    void editStudentDetails();
+    void editTeacherDetails();
+    void viewStudentDetails();
+    void viewTeacherDetails();
+
+private:
+    string username;
+    string password;
+};
+
+int Admin::signInToSystem() {
+    string input_username, input_password;
+    cout << "Enter username: ";
+    cin >> input_username;
+    cout << "Enter password: ";
+    cin >> input_password;
+
+    ifstream file("admin.txt");
+    if (file.is_open()) {
+        string saved_username, saved_password;
+        while (file >> saved_username >> saved_password) {
+            if (input_username == saved_username && input_password == saved_password) {
+                cout << "Login successful!\n";
+                file.close();
+                return 8;
+            }
+        }
+        file.close();
+    }
+    else{
+    cout << "Invalid username or password.\n";
+    return 9;
+}
+return 0;
+}
+
+void Admin::addNewTeacher() {
+    string teacherID, firstName, lastName, department, username, password, registrationDate, gender, contactNo, qualification, address;
+    cin.ignore();
+    cout << "Enter teacher ID (generate using option 2): ";
+    getline(cin, teacherID);
+    cout << "First name: ";
+    getline(cin, firstName);
+    cout << "Last name: ";
+    getline(cin, lastName);
+    cout << "Department: ";
+    getline(cin, department);
+    cout << "Username: ";
+    getline(cin, username);
+    cout << "Password: ";
+    getline(cin, password);
+    cout << "Registration date (YYYY-MM-DD): ";
+    getline(cin, registrationDate);
+    cout << "Gender: ";
+    getline(cin, gender);
+    cout << "Contact number: ";
+    getline(cin, contactNo);
+    cout << "Qualification: ";
+    getline(cin, qualification);
+    cout << "Address: ";
+    getline(cin, address);
+
+    ofstream outFile("Teacher.txt", ios::app);
+    if (outFile.is_open()) {
+        outFile << teacherID << "," << firstName << "," << lastName << "," << department << "," << username << "," << password << ","
+                << registrationDate << "," << gender << "," << contactNo << "," << qualification << "," << address << endl;
+        outFile.close();
+        cout << "Teacher added successfully!\n";
+    } else {
+        cout << "Error: Unable to open file.\n";
+    }
+}
+
+void Admin::generateTeacherID() {
+    static int idCounterCS = 1, idCounterEE = 1, idCounterSE = 1, idCounterBus = 1, idCounterSS = 1;
+    string teacherID;
+    int department;
+    do {
+        cout << "Select department:\n1. CS\n2. EE\n3. SE\n4. Business\n5. Social Science\n6. Exit\n";
+        cin >> department;
+        switch (department) {
+        case 1:
+            teacherID = "CS-" + to_string(idCounterCS++);
+            cout << "Generated ID: " << teacherID << endl;
+            break;
+        case 2:
+            teacherID = "EE-" + to_string(idCounterEE++);
+            cout << "Generated ID: " << teacherID << endl;
+            break;
+        case 3:
+            teacherID = "SE-" + to_string(idCounterSE++);
+            cout << "Generated ID: " << teacherID << endl;
+            break;
+        case 4:
+            teacherID = "Bus-" + to_string(idCounterBus++);
+            cout << "Generated ID: " << teacherID << endl;
+            break;
+        case 5:
+            teacherID = "SS-" + to_string(idCounterSS++);
+            cout << "Generated ID: " << teacherID << endl;
+            break;
+        case 6:
+            break;
+        default:
+            cout << "Invalid choice!\n";
+        }
+    } while (department != 6);
+}
+
+void Admin::addNewStudent() {
+    string studentId, firstName, lastName, department, registrationDate, gender, contactNo, bloodGroup, address, feeStatus, qualification, marks;
+    cin.ignore();
+    cout << "Enter student ID (generate using option 3): ";
+    getline(cin, studentId);
+    cout << "First Name: ";
+    getline(cin, firstName);
+    cout << "Last Name: ";
+    getline(cin, lastName);
+    cout << "Department: ";
+    getline(cin, department);
+    cout << "Registration Date (YYYY-MM-DD): ";
+    getline(cin, registrationDate);
+    cout << "Gender: ";
+    getline(cin, gender);
+    cout << "Contact No: ";
+    getline(cin, contactNo);
+    cout << "Blood Group: ";
+    getline(cin, bloodGroup);
+    cout << "Address: ";
+    getline(cin, address);
+    cout << "Fee Status (Paid/Unpaid): ";
+    getline(cin, feeStatus);
+    cout << "Qualification: ";
+    getline(cin, qualification);
+    cout << "Marks: ";
+    getline(cin, marks);
+
+    ofstream outFile("Student.txt", ios::app);
+    if (outFile.is_open()) {
+        outFile << studentId << "," << firstName << "," << lastName << "," << department << "," << registrationDate << "," << gender << ","
+                << contactNo << "," << bloodGroup << "," << address << "," << feeStatus << "," << qualification << "," << marks << endl;
+        outFile.close();
+        cout << "Student added successfully.\n";
+    } else {
+        cout << "Error: Unable to open file.\n";
+    }
+}
+
+void Admin::generateStudentID() {
+    static int idCounterCS = 1, idCounterEE = 1, idCounterSE = 1, idCounterBus = 1, idCounterSS = 1;
+    string studentID;
+    int department;
+    do {
+        cout << "Select department:\n1. CS\n2. EE\n3. SE\n4. Business\n5. Social Science\n6. Exit\n";
+        cin >> department;
+        switch (department) {
+        case 1:
+            studentID = "CS-" + to_string(idCounterCS++);
+            cout << "Generated ID: " << studentID << endl;
+            break;
+        case 2:
+            studentID = "EE-" + to_string(idCounterEE++);
+            cout << "Generated ID: " << studentID << endl;
+            break;
+        case 3:
+            studentID = "SE-" + to_string(idCounterSE++);
+            cout << "Generated ID: " << studentID << endl;
+            break;
+        case 4:
+            studentID = "Bus-" + to_string(idCounterBus++);
+            cout << "Generated ID: " << studentID << endl;
+            break;
+        case 5:
+            studentID = "SS-" + to_string(idCounterSS++);
+            cout << "Generated ID: " << studentID << endl;
+            break;
+        case 6:
+            break;
+        default:
+            cout << "Invalid choice!\n";
+        }
+    } while (department != 6);
+}
+
+void Admin::editStudentDetails() {
+    string id;
+    cout << "Enter student ID: ";
+    cin >> id;
+    ifstream file("Student.txt");
+    if (!file.is_open()) {
+        cout << "Error: Could not open file\n";
+        return;
+    }
+    vector<string> lines;
+    string line;
+    while (getline(file, line)) {
+        lines.push_back(line);
+    }
+    file.close();
+    bool found = false;
+    for (size_t i = 0; i < lines.size(); i++) {
+        stringstream ss(lines[i]);
+        string current_id;
+        getline(ss, current_id, ',');
+        if (current_id == id) {
+            found = true;
+            string firstName, lastName, department, registrationDate, gender, contactNo, bloodGroup, address, feeStatus, qualification, marks;
+            cin.ignore();
+            cout << "Enter new First Name: ";
+            getline(cin, firstName);
+            cout << "Enter new Last Name: ";
+            getline(cin, lastName);
+            cout << "Enter new Department: ";
+            getline(cin, department);
+            cout << "Enter new Registration Date: ";
+            getline(cin, registrationDate);
+            cout << "Enter new Gender: ";
+            getline(cin, gender);
+            cout << "Enter new Contact No: ";
+            getline(cin, contactNo);
+            cout << "Enter new Blood Group: ";
+            getline(cin, bloodGroup);
+            cout << "Enter new Address: ";
+            getline(cin, address);
+            cout << "Enter new Fee Status: ";
+            getline(cin, feeStatus);
+            cout << "Enter new Qualification: ";
+            getline(cin, qualification);
+            cout << "Enter new Marks: ";
+            getline(cin, marks);
+            lines[i] = id + "," + firstName + "," + lastName + "," + department + "," + registrationDate + "," + gender + "," +
+                       contactNo + "," + bloodGroup + "," + address + "," + feeStatus + "," + qualification + "," + marks;
+            cout << "Details updated successfully.\n";
+            break;
+        }
+    }
+    ofstream outFile("Student.txt");
+    if (!outFile.is_open()) {
+        cout << "Error: Could not open file\n";
+        return;
+    }
+    for (const auto& l : lines) {
+        outFile << l << endl;
+    }
+    outFile.close();
+    if (!found) {
+        cout << "Error: Student with ID " << id << " not found.\n";
+    }
+}
+
+void Admin::editTeacherDetails() {
+    string id;
+    cout << "Enter teacher ID: ";
+    cin >> id;
+    ifstream file("Teacher.txt");
+    if (!file.is_open()) {
+        cout << "Error: Could not open file\n";
+        return;
+    }
+    vector<string> lines;
+    string line;
+    while (getline(file, line)) {
+        lines.push_back(line);
+    }
+    file.close();
+    bool found = false;
+    for (size_t i = 0; i < lines.size(); i++) {
+        stringstream ss(lines[i]);
+        string current_id;
+        getline(ss, current_id, ',');
+        if (current_id == id) {
+            found = true;
+            string firstName, lastName, department, username, password, registrationDate, gender, contactNo, qualification, address;
+            cin.ignore();
+            cout << "Enter new First Name: ";
+            getline(cin, firstName);
+            cout << "Enter new Last Name: ";
+            getline(cin, lastName);
+            cout << "Enter new Department: ";
+            getline(cin, department);
+            cout << "Enter new Username: ";
+            getline(cin, username);
+            cout << "Enter new Password: ";
+            getline(cin, password);
+            cout << "Enter new Registration Date: ";
+            getline(cin, registrationDate);
+            cout << "Enter new Gender: ";
+            getline(cin, gender);
+            cout << "Enter new Contact No: ";
+            getline(cin, contactNo);
+            cout << "Enter new Qualification: ";
+            getline(cin, qualification);
+            cout << "Enter new Address: ";
+            getline(cin, address);
+            lines[i] = id + "," + firstName + "," + lastName + "," + department + "," + username + "," + password + "," +
+                       registrationDate + "," + gender + "," + contactNo + "," + qualification + "," + address;
+            cout << "Details updated successfully.\n";
+            break;
+        }
+    }
+    ofstream outFile("Teacher.txt");
+    if (!outFile.is_open()) {
+        cout << "Error: Could not open file\n";
+        return;
+    }
+    for (const auto& l : lines) {
+        outFile << l << endl;
+    }
+    outFile.close();
+    if (!found) {
+        cout << "Error: Teacher with ID " << id << " not found.\n";
+    }
+}
+
+void Admin::viewStudentDetails() {
+    ifstream inFile("Student.txt");
+    if (!inFile) {
+        cout << "Unable to open Student.txt\n";
+        return;
+    }
+    string line;
+    cout << "\nStudent Details:\n";
+    while (getline(inFile, line)) {
+        cout << line << endl;
+    }
+    inFile.close();
+}
+
+void Admin::viewTeacherDetails() {
+    ifstream inFile("Teacher.txt");
+    if (!inFile) {
+        cout << "Unable to open Teacher.txt\n";
+        return;
+    }
+    string line;
+    cout << "\nTeacher Details:\n";
+    while (getline(inFile, line)) {
+        cout << line << endl;
+    }
+    inFile.close();
+}
+
+// Student Class
+const int MAX_ATTENDANCE_DAYS = 100;
+const int MAX_COURSES = 5;
+class Student {
+public:
+    Student() : firstName(""), lastName("") {}
+    Student(string u, string p, string f, string l, string id, bool paid)
+        : username(u), password(p), firstName(f), lastName(l), studentId(id), isPaid(paid), numAttendanceDays(0), numCourses(0) {}
+    void signIn();
+    void viewAttendance();
+    void viewMarks();
+    void viewGrades();
+    void viewRegisteredCourses();
+    friend void viewFeeStatus(const Student& s);
+
+    string username, password, firstName, lastName, studentId;
+    bool isPaid;
+    string dates[MAX_ATTENDANCE_DAYS];
+    char status[MAX_ATTENDANCE_DAYS];
+    int numAttendanceDays;
+    string courseNames[MAX_COURSES];
+    int marks[MAX_COURSES];
+    string grades[MAX_COURSES];
+    int numCourses;
+    string courses[MAX_COURSES];
+};
+
+// Student Implementation
+void Student::signIn() {
+    string u, p;
+    cout << "Enter username: ";
+    cin >> u;
+    cout << "Enter password: ";
+    cin >> p;
+    if (u == username && p == password) {
+        cout << "Welcome, " << firstName << " " << lastName << "!\n";
+    } else {
+        cout << "Invalid username or password. Try again.\n";
+        signIn();
+    }
+}
+
+void Student::viewAttendance() {
+    while (numAttendanceDays < MAX_ATTENDANCE_DAYS) {
+        cout << "Enter date (YYYY-MM-DD) (or \"done\" to finish): ";
+        string input;
+        cin >> input;
+        if (input == "done") break;
+        dates[numAttendanceDays] = input;
+        cout << "Enter attendance status (P/A): ";
+        cin >> status[numAttendanceDays];
+        numAttendanceDays++;
+    }
+    cout << "Attendance data:\n";
+    for (int i = 0; i < numAttendanceDays; i++) {
+        cout << "Date: " << dates[i] << ", Status: " << status[i] << endl;
+    }
+}
+
+void Student::viewMarks() {
+    for (int i = 0; i < MAX_COURSES; i++) {
+        cout << "Enter name of course " << i + 1 << ": ";
+        cin >> courseNames[i];
+        cout << "Enter marks for course " << i + 1 << ": ";
+        cin >> marks[i];
+    }
+    cout << "Marks for all courses:\n";
+    for (int i = 0; i < MAX_COURSES; i++) {
+        cout << courseNames[i] << ": " << marks[i] << endl;
+    }
+}
+
+void Student::viewGrades() {
+    for (int i = 0; i < MAX_COURSES; i++) {
+        cout << "Enter name of course " << i + 1 << ": ";
+        cin >> courseNames[i];
+        cout << "Enter marks for course " << i + 1 << ": ";
+        cin >> marks[i];
+        if (marks[i] >= 90) grades[i] = "A+";
+        else if (marks[i] >= 80) grades[i] = "A";
+        else if (marks[i] >= 70) grades[i] = "B";
+        else if (marks[i] >= 60) grades[i] = "C";
+        else if (marks[i] >= 50) grades[i] = "D";
+        else grades[i] = "F";
+    }
+    cout << "Grades for all courses:\n";
+    for (int i = 0; i < MAX_COURSES; i++) {
+        cout << courseNames[i] << ": " << grades[i] << endl;
+    }
+}
+
+void Student::viewRegisteredCourses() {
+    cout << "Enter number of registered courses: ";
+    cin >> numCourses;
+    if (numCourses > MAX_COURSES) {
+        cout << "Cannot exceed " << MAX_COURSES << " courses.\n";
+        return;
+    }
+    for (int i = 0; i < numCourses; i++) {
+        cout << "Enter name of course " << i + 1 << ": ";
+        cin >> courses[i];
+    }
+    cout << "Registered courses:\n";
+    for (int i = 0; i < numCourses; i++) {
+        cout << courses[i] << endl;
+    }
+}
+
+void viewFeeStatus(const Student& s) {
+    cout << "Name: " << s.firstName << " " << s.lastName << endl;
+    cout << "Student ID: " << s.studentId << endl;
+    cout << "Fee Status: " << (s.isPaid ? "Paid" : "Unpaid") << endl;
+}
+
+// Teacher Class
+class Teacher {
+public:
+    Teacher() : username(""), password(""), name(""), age(0), department(""), course("") {}
+    void signIn();
+    void teacherMenu();
+    void viewTimeTable();
+    void markAttendance();
+    void assignMarks();
+    void assignGrades();
+
+    string username, password, name, department, course;
+    int age;
+    string lectures[5], dates[5], timetable[5];
+    int marks[50][5];
+    char grades[50];
+};
+
+// Teacher Implementation
+void Teacher::signIn() {
+    string u, p;
+    cout << "Enter username: ";
+    cin >> u;
+    cout << "Enter password: ";
+    cin >> p;
+    ifstream file("Teacher.txt");
+    if (file.is_open()) {
+        string line, id, fname, lname, dept, uname, pwd, regdate, gender, contact, qual, addr;
+        while (getline(file, line)) {
+            stringstream ss(line);
+            getline(ss, id, ',');
+            getline(ss, fname, ',');
+            getline(ss, lname, ',');
+            getline(ss, dept, ',');
+            getline(ss, uname, ',');
+            getline(ss, pwd, ',');
+            if (uname == u && pwd == p) {
+                username = uname;
+                password = pwd;
+                name = fname + " " + lname;
+                department = dept;
+                cout << "Welcome, " << name << "!\n";
+                file.close();
+                return;
+            }
+        }
+        file.close();
+    }
+    cout << "Invalid username or password. Try again.\n";
+    signIn();
+}
+
+void Teacher::teacherMenu() {
+    int choice;
+    do {
+        cout << "\nTeacher Menu\n";
+        cout << "1. View Time Table\n";
+        cout << "2. Mark Attendance\n";
+        cout << "3. Assign Marks\n";
+        cout << "4. Assign Grades\n";
+        cout << "5. Logout\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            viewTimeTable();
+            break;
+        case 2:
+            markAttendance();
+            break;
+        case 3:
+            assignMarks();
+            break;
+        case 4:
+            assignGrades();
+            break;
+        case 5:
+            cout << "Logging out...\n";
+            break;
+        default:
+            cout << "Invalid choice.\n";
+        }
+    } while (choice != 5);
+}
+
+void Teacher::viewTimeTable() {
+    cout << "\nTeacher Time Table\n";
+    cout << "Course: " << course << endl;
+    for (int i = 0; i < 5; i++) {
+        if (!lectures[i].empty())
+            cout << lectures[i] << " on " << dates[i] << " at " << timetable[i] << endl;
+    }
+}
+
+void Teacher::markAttendance() {
+    int roll;
+    char attendance;
+    cout << "Enter roll number of student: ";
+    cin >> roll;
+    cout << "Enter attendance (P for Present, A for Absent): ";
+    cin >> attendance;
+    if (roll < 1 || roll > 50) {
+        cout << "Invalid roll number.\n";
+        markAttendance();
+    } else {
+        if (attendance == 'P' || attendance == 'A') {
+            grades[roll - 1] = attendance;
+            cout << "Attendance marked successfully.\n";
+        } else {
+            cout << "Invalid attendance.\n";
+            markAttendance();
+        }
+    }
+}
+
+void Teacher::assignMarks() {
+    int roll, marksObtained;
+    cout << "Enter roll number of student: ";
+    cin >> roll;
+    if (roll < 1 || roll > 50) {
+        cout << "Invalid roll number.\n";
+        assignMarks();
+    } else {
+        cout << "Enter marks obtained (out of 100): ";
+        cin >> marksObtained;
+        if (marksObtained >= 0 && marksObtained <= 100) {
+            marks[roll - 1][0] = marksObtained;
+            cout << "Marks assigned successfully.\n";
+        } else {
+            cout << "Invalid marks.\n";
+            assignMarks();
+        }
+    }
+}
+
+void Teacher::assignGrades() {
+    int roll;
+    char grade;
+    cout << "Enter roll number of student: ";
+    cin >> roll;
+    if (roll < 1 || roll > 50) {
+        cout << "Invalid roll number.\n";
+        assignGrades();
+    } else {
+        cout << "Enter grade (A/B/C/D/F): ";
+        cin >> grade;
+        if (grade == 'A' || grade == 'B' || grade == 'C' || grade == 'D' || grade == 'F') {
+            grades[roll - 1] = grade;
+            cout << "Grade assigned successfully.\n";
+        } else {
+            cout << "Invalid grade.\n";
+            assignGrades();
+        }
+    }
+}
+
+// Main Function
+int main() {
+    system("color CF");
+    int ch;
+    do {
+        system("cls");
+        cout << "\t>>>>>>> Fast University Flex <<<<<<\n\n";
+        cout << "\t------------------------------------\n";
+        cout << "\t|0. Exit                          |\n";
+        cout << "\t|1. Administrator Module          |\n";
+        cout << "\t|2. Student Module                |\n";
+        cout << "\t|3. Teacher Module                |\n";
+        cout << "\t------------------------------------\n";
+        cout << "Select option: ";
+        cin >> ch;
+
+        if (ch == 1) {
+            Admin A1;
+            Admin a2("Alamraza", "1234");
+            
+            if(A1.signInToSystem()==8){
+			
+            int choice;
+            do {
+                system("cls");
+                cout << "Admin Menu:\n";
+                cout << "1. Sign in\n";
+                cout << "2. Add new Teacher\n";
+                cout << "3. Add new Student\n";
+                cout << "4. Edit Student details\n";
+                cout << "5. Edit Teacher details\n";
+                cout << "6. View Student details\n";
+                cout << "7. View Teacher details\n";
+                cout << "8. Logout\n";
+                cout << "Enter choice: ";
+            
+                cin >> choice;
+                switch (choice) {
+                case 1:
+                    
+                    break;
+                case 2:
+                    A1.generateTeacherID();
+                    A1.addNewTeacher();
+                    break;
+                case 3:
+                    A1.generateStudentID();
+                    A1.addNewStudent();
+                    break;
+                case 4:
+                    A1.editStudentDetails();
+                    break;
+                case 5:
+                    A1.editTeacherDetails();
+                    break;
+                case 6:
+                    A1.viewStudentDetails();
+                    break;
+                case 7:
+                    A1.viewTeacherDetails();
+                    break;
+                case 8:
+                    cout << "Logging out...\n";
+                    break;
+                default:
+                    cout << "Invalid choice.\n";
+                }
+                system("pause");
+            } while (choice != 8); }
+        } else if (ch == 2) {
+            Student s("Mahnoor", "123", "Mah", "noor", "CS-001", true);
+            s.signIn();
+            int choice2;
+            do {
+                system("cls");
+                cout << "\nStudent Menu\n";
+                cout << "1. View Attendance\n";
+                cout << "2. View Marks\n";
+                cout << "3. View Grades\n";
+                cout << "4. View Registered Courses\n";
+                cout << "5. View Fee Status\n";
+                cout << "6. Logout\n";
+                cout << "Enter choice: ";
+                cin >> choice2;
+                switch (choice2) {
+                case 1:
+                    s.viewAttendance();
+                    break;
+                case 2:
+                    s.viewMarks();
+                    break;
+                case 3:
+                    s.viewGrades();
+                    break;
+                case 4:
+                    s.viewRegisteredCourses();
+                    break;
+                case 5:
+                    viewFeeStatus(s);
+                    break;
+                case 6:
+                    cout << "Logging out...\n";
+                    break;
+                default:
+                    cout << "Invalid choice.\n";
+                }
+                system("pause");
+            } while (choice2 != 6);
+        } else if (ch == 3) {
+            Teacher t;
+            t.course = "C++ Programming";
+            t.lectures[0] = "Introduction to C++";
+            t.dates[0] = "Monday";
+            t.timetable[0] = "10:00 AM - 12:00 PM";
+            t.lectures[1] = "Data Types and Variables";
+            t.dates[1] = "Tuesday";
+            t.timetable[1] = "2:00 PM - 4:00 PM";
+            t.lectures[2] = "Conditional Statements";
+            t.dates[2] = "Wednesday";
+            t.timetable[2] = "10:00 AM - 12:00 PM";
+            t.lectures[3] = "Loops";
+            t.dates[3] = "Thursday";
+            t.timetable[3] = "2:00 PM - 4:00 PM";
+            t.lectures[4] = "Functions";
+            t.dates[4] = "Friday";
+            t.timetable[4] = "10:00 AM - 12:00 PM";
+            t.signIn();
+            t.teacherMenu();
+        } else if (ch != 0) {
+            cout << "Invalid input!\n";
+            system("pause");
+        }
+    } while (ch != 0);
+
+    return 0;
+}
