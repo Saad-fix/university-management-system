@@ -700,7 +700,7 @@ int main() {
                 } while (choice != 7);
             }
         } else if (ch == 2) {
-            Student s("Mahnoor", "123", "Mah", "noor", "CS-001", true);
+            Student s("Haji", "123", "rana", "muzammil", "CY-001", true);
             s.signIn();
             int choice2;
             do {
